@@ -59,33 +59,6 @@ ABCDEFG ABCDEFG_to_ABCDEFG_v2(ABCDEFG src, Word W[64], int count){
     return dst;
 }
 
-/*
-ABCDEFG ABCDEFG_to_ABCDEFG(ABCDEFG src, Word W[64], int count){
-    Word K[64] = {
-    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
-
-    ABCDEFG dst;
-    if(count == 64) return src;
-    Word T1 = W[count] + K[count] + src.H + Ch(src.E,src.F,src.G) + Usigma1(src.E);
-    Word T2 = Maj(src.A,src.B,src.C) + Usigma0(src.A);
-    dst.H = src.G;
-    dst.G = src.F;
-    dst.F = src.E;
-    dst.E = src.D + T1;
-    dst.D = src.C;
-    dst.C = src.B;
-    dst.B = src.A;
-    dst.A = T1 + T2;
-    return ABCDEFG_to_ABCDEFG(dst, W, count+1);
-}*/
-
 void sha256_v3(Word block[16]){
     Word W[64];
     schedule(block,W); // setup W
@@ -113,81 +86,6 @@ void sha256_v3(Word block[16]){
     Hash[6] += init.G;
     Hash[7] += init.H;
 }
-
-/*
-void sha256_v2(Word block[16]){
-    Word W[64];
-    schedule(block,W); // setup W
-
-    ABCDEFG init;
-    init.A = Hash[0];
-    init.B = Hash[1];
-    init.C = Hash[2];
-    init.D = Hash[3];
-    init.E = Hash[4];
-    init.F = Hash[5];
-    init.G = Hash[6];
-    init.H = Hash[7];
-
-    ABCDEFG result = ABCDEFG_to_ABCDEFG(init, W, 0);
-
-    Hash[0] += result.A;
-    Hash[1] += result.B;
-    Hash[2] += result.C;
-    Hash[3] += result.D;
-    Hash[4] += result.E;
-    Hash[5] += result.F;
-    Hash[6] += result.G;
-    Hash[7] += result.H;
-}*/
-
-/*
-void sha256(Word block[16]){
-    Word A = Hash[0];
-    Word B = Hash[1];
-    Word C = Hash[2];
-    Word D = Hash[3];
-    Word E = Hash[4];
-    Word F = Hash[5];
-    Word G = Hash[6];
-    Word H = Hash[7];
-
-    Word W[64];
-    schedule(block,W); // setup W
-
-    printf("W = ");
-    for(int i = 0;i<64;i++){
-        printf("0x%04x ",W[i]);
-    }
-    printf("\n");
-
-    for(int t = 0;t<64;t++){
-        Word T1 = W[t] + K[t] + H + Ch(E,F,G) + Usigma1(E);
-        Word T2 = Maj(A,B,C) + Usigma0(A);
-        H = G;
-        G = F;
-        F = E;
-        E = D + T1;
-        D = C;
-        C = B;
-        B = A;
-        A = T1 + T2;
-
-    }
-
-    printf("H = 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x \n",A,B,C,D,E,F,G,H);
-
-    Hash[0] += A;
-    Hash[1] += B;
-    Hash[2] += C;
-    Hash[3] += D;
-    Hash[4] += E;
-    Hash[5] += F;
-    Hash[6] += G;
-    Hash[7] += H;
-
-    return;
-}*/
 
 void byte64_to_word16(unsigned char source[64], Word result[16]){
     for(int i = 0;i<16;i++){
